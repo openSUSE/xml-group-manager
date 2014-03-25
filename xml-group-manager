@@ -1,0 +1,213 @@
+#!/bin/bash
+
+# Copyright: 2014 Rick Salevsky <rsalevsky@suse.com>
+#
+# This software may be used and distributed according to the terms of
+# the GNU General Public License (GPL), version 3, or at your option
+# any later version.
+
+
+script_usage()
+{
+echo "
+xml-group-manager (xgm)
+------------------------------------------------------
+
+Usage:
+xml-group-manager <group> <add|delete|update> <suboptions>
+
+
+Global Options:
+  -g, --group     XML Group ID to edited
+
+  -a, --add       add a xml group
+  -d, --delete    delete a xml group
+  -u, --update    update a xml group
+
+  -h, --help      prints this help
+
+Suboptions:
+  -f, --file      input XML settings
+  -c, --catalog   set the default output Catalog
+                  else /etc/xml/catalog is used
+"
+}
+
+init()
+{
+	rootdir=$(dirname "$(readlink -e "$0")")
+	if [[ -e $rootdir/xslt/add-group.xsl ]];then
+		add_stylesheet="$rootdir/xslt/add-group.xsl"
+	else
+		if [[ -e /usr/share/xml-group-manager/stylesheets/add-group.xsl ]];then
+			add_stylesheet="/usr/share/xml-group-manager/stylesheets/add-group.xsl"
+		else
+			echo "Error: Can't found the xml-group-manager stylesheets!"
+			exit 1
+		fi
+	fi
+	if [[ -e $rootdir/xslt/delete-group.xsl ]];then
+		delete_stylesheet="$rootdir/xslt/delete-group.xsl"
+	else
+		if [[ -e /usr/share/xml-group-manager/stylesheets/delete-group.xsl ]];then
+			delete_stylesheet="/usr/share/xml-group-manager/stylesheets/delete-group.xsl"
+		else
+			echo "Error: Can't found the xml-group-manager stylesheets!"
+			exit 1
+		fi
+	fi
+	if [[ -e $rootdir/xslt/update-group.xsl ]];then
+		update_stylesheet="$rootdir/xslt/update-group.xsl"
+	else
+		if [[ -e /usr/share/xml-group-manager/stylesheets/update-group.xsl ]];then
+			update_stylesheet="/usr/share/xml-group-manager/stylesheets/update-group.xsl"
+		else
+			echo "Error: Can't found the xml-group-manager stylesheets!"
+			exit 1
+		fi
+	fi
+}
+
+prepair_files()
+{
+	tmp_catalog=$(mktemp --tmpdir xmg-catalog-XXXXXXXX.xml)
+	tmp_input_file=$(mktemp --tmpdir xmg-input-XXXXXXXX.xml)
+	cp $file $tmp_input_file
+	sed -i '1 i\<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">' $tmp_input_file
+	sed -i '$a i\</catalog>' $tmp_input_file
+}
+
+prepair_file()
+{
+	tmp_catalog=$(mktemp --tmpdir xmg-catalog-XXXXXXXX.xml)
+}
+
+add_group()
+{
+	if [[ -n $group && -e $file ]];then
+		prepair_files
+		xsltproc --stringparam xmlfile $tmp_input_file --stringparam group-id "$group" $add_stylesheet $catalog > $tmp_catalog
+		if [[ $? != 0 ]]; then
+			rm $tmp_catalog $tmp_input_file
+			exit 1
+		else
+			xmllint --format $tmp_catalog -o $catalog
+			rm $tmp_catalog $tmp_input_file
+			exit 0
+		fi
+	else
+		echo "Error: Group or input file is missing!"
+		exit 1
+	fi
+}
+
+delete_group()
+{
+	if [[ -n $group ]];then
+		prepair_file
+		xsltproc --stringparam group-id "$group" $delete_stylesheet $catalog > $tmp_catalog
+		if [[ $? != 0 ]]; then
+			rm $tmp_catalog
+			exit 1
+		else
+			xmllint --format $tmp_catalog -o $catalog
+			rm $tmp_catalog
+			exit 0
+		fi
+	else
+		echo "Error: Group is missing!"
+		exit 1
+	fi
+}
+
+update_group()
+{
+	if [[ -n $group && -e $file ]];then
+		prepair_files
+		xsltproc --stringparam xmlfile $tmp_input_file --stringparam group-id "$group" $update_stylesheet $catalog > $tmp_catalog
+		if [[ $? != 0 ]]; then
+			rm $tmp_catalog $tmp_input_file
+			exit 1
+		else
+			xmllint --format $tmp_catalog -o $catalog
+			rm $tmp_catalog $tmp_input_file
+			exit 0
+		fi
+	else
+		echo "Error: Group or input file is missing!"
+		exit 1
+	fi
+}
+
+
+ARGS=$(getopt -o g:aduhf:c: -l "group:,add,delete,update,help,file:,catalog:" -n "$0" -- "$@");
+
+while true; do
+    case "$1" in
+        -h|--help)
+            script_usage
+            exit 0
+            ;;
+        -a|--add)
+            if [ -n "$1" ]; then
+                action=add;
+                shift;
+            fi
+            ;;
+        -d|--delete)
+            if [ -n "$1" ]; then
+                action=delete;
+                shift;
+            fi
+            ;;
+        -u|--update)
+            if [ -n "$1" ]; then
+                action=update;
+                shift;
+            fi
+            ;;
+        -g|--group)
+            shift;
+            if [ -n "$1" ]; then
+                group=$1;
+                shift;
+            fi
+            ;;
+        -f|--file)
+            shift;
+            if [ -n "$1" ]; then
+                file=$(readlink -e $1);
+                shift;
+            fi
+            ;;
+        -c|--catalog)
+            shift;
+            if [ -n "$1" ]; then
+                catalog=$(readlink -e $1);
+                shift;
+			else
+				catalog=/etc/xml/catlog
+				shift;
+            fi
+            ;;
+		*)
+			break;
+			;;
+    esac
+done
+
+
+case "$action" in
+	add)
+		init
+		add_group
+		;;
+	delete)
+		init
+		delete_group
+		;;
+	update)
+		init
+		update_group
+		;;
+esac
