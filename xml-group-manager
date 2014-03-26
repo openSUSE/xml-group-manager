@@ -18,18 +18,20 @@ xml-group-manager <group> <add|delete|update> <suboptions>
 
 
 Global Options:
-  -g, --group     XML Group ID to edited
+  -g, --group     XML Group ID or Name
 
-  -a, --add       add a xml group
-  -d, --delete    delete a xml group
-  -u, --update    update a xml group
+  -a, --add       add a XML group
+  -d, --delete    delete a XML group
+  -u, --update    update a XML group
 
   -h, --help      prints this help
 
 Suboptions:
-  -f, --file      input XML settings
-  -c, --catalog   set the default output Catalog
-                  else /etc/xml/catalog is used
+  -f, --file      input XML-File with the
+				  XML-Deglarations
+  -c, --catalog   set the default output catalog
+                  or file else /etc/xml/catalog
+				  is used
 "
 }
 
