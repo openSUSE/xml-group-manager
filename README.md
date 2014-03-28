@@ -21,8 +21,8 @@ Global Options:
 Suboptions:
   -f, --file      input XML-File with the
                   XML-Deglarations
-  -c, --catalog   set the default output catalog
-                  or file else /etc/xml/catalog is used
+  -c, --catalog   set the default output catalog file
+                  else /etc/xml/catalog is used
 ```
 
 
