@@ -1,135 +1,142 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE refentry PUBLIC 
-   "-//OASIS//DTD DocBook XML V4.5//EN"
-   "http://www.docbook.org/xml/4.5/docbookx.dtd"
+<!DOCTYPE article PUBLIC 
+"-//OASIS//DTD DocBook XML V4.5//EN"
+"http://www.docbook.org/xml/4.5/docbookx.dtd"
 [
-  <!ENTITY xgm_command "xml-group-manager">
-  <!ENTITY xgm_version "1.0">
+<!ENTITY xgm_command "xml-group-manager">
+<!ENTITY xgm_version "1.0">
 ]>
+<article id="xgm.manpages" lang="en">
+ <title>xml-group-manager man pages</title>
+ <para>
+  The xml-group-manager man pages
+ </para>
+ <refentry lang="en" id="xgm">
+  <refentryinfo>
+   <productname>&xgm_command;</productname>
+   <authorgroup>
+    <author>
+     <contrib>Developer</contrib>
+     <firstname>Rick</firstname>
+     <surname>Salevsky</surname>
+     <email>rsalevsky@suse.com</email>
+    </author>
+   </authorgroup>
+  </refentryinfo>
+  <refmeta>
+   <refentrytitle>&xgm_command;</refentrytitle>
+   <manvolnum>1</manvolnum>
+   <refmiscinfo class="date"><?dbtimestamp format="Y B d"?></refmiscinfo>
+   <refmiscinfo class="version">&xgm_version;</refmiscinfo>
+   <refmiscinfo class="manual">xml-group-manager</refmiscinfo>
+  </refmeta>
+  <refnamediv>
+   <refname>&xgm_command;</refname>
+   <refpurpose>
+    The xml-group-manager is a little helper script to add, delete or update
+    groups in XML catalogs or XML files in an easy way. That means you can
+    edit catalog files without any XML commands and without knowledge of the
+    XML syntax.
+   </refpurpose>
+  </refnamediv>
 
-<refentry lang="en" id="xgm">
- <refentryinfo>
-  <productname>&xgm_command;</productname>
-  <authorgroup>
-   <author>
-    <contrib>Developer</contrib>
-    <firstname>Rick</firstname>
-    <surname>Salevsky</surname>
-    <email>rsalevsky@suse.com</email>
-   </author>
-  </authorgroup>
- </refentryinfo>
- <refmeta>
-  <refentrytitle>&xgm_command;</refentrytitle>
-  <manvolnum>1</manvolnum>
-  <refmiscinfo class="date"><?dbtimestamp format="Y B d"?></refmiscinfo>
-  <refmiscinfo class="version">&xgm_version;</refmiscinfo>
-  <refmiscinfo class="manual">xml-group-manager</refmiscinfo>
- </refmeta>
- <refnamediv>
-  <refname>&xgm_command;</refname>
-  <refpurpose>
-   The xml-group-manager is a little helper script for add, delete or update groups in
-   XML catalogs or XML files in an easy way. That means you can edit XML files without any XML
-   commands and without hight knowledge of the XML syntax.
-  </refpurpose>
- </refnamediv>
+  <refsynopsisdiv id="xgm.synopsis">
+   <title>Synopsis</title>
+   <cmdsynopsis>
+    <command>&xgm_command;</command>
+    <arg choice="req">
+     <replaceable>GROUP</replaceable>
+    </arg>
+    <arg choice="req">
+     <replaceable>ADD|DELETE|UPDATE</replaceable>
+    </arg>
+    <arg choice="req">
+     <replaceable>INPUT_FILE</replaceable>
+    </arg>
+    <arg choice="opt">
+     <replaceable>XML_CATALOG</replaceable>
+    </arg>
+   </cmdsynopsis>
+  </refsynopsisdiv>
 
- <refsynopsisdiv id="xgm.synopsis">
-  <title>Synopsis</title>
-  <cmdsynopsis>
-   <command>&xgm_command;</command>
-   <arg choice="req">
-    <replaceable>GROUP</replaceable>
-   </arg>
-   <arg choice="req">
-    <replaceable>ADD|DELETE|UPDATE</replaceable>
-   </arg>
-   <arg choice="req">
-    <replaceable>INPUT_FILE</replaceable>
-   </arg>
-   <arg choice="opt">
-    <replaceable>XML_CATALOG</replaceable>
-   </arg>
-  </cmdsynopsis>
- </refsynopsisdiv>
+  <refsect1 id="xgm.description">
+   <title>Description</title>
+   <variablelist>
+    <varlistentry>
+     <term>-g, --group</term>
+     <listitem>
+      <para>XML Group ID or Name</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>-a, --add</term>
+     <listitem>
+      <para>add an XML group</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>-d, --delete</term>
+     <listitem>
+      <para>delete an XML group</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>-u, --update</term>
+     <listitem>
+      <para>update an XML group</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>-h, --help</term>
+     <listitem>
+      <para>print the help</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>-f, --file</term>
+     <listitem>
+      <para>input XML-File with the XML-Declarations</para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>-c, --catalog</term>
+     <listitem>
+      <para>set the output catalog file; if not specified /etc/xml/catalog is
+      used</para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </refsect1>
 
- <refsect1 id="xgm.description">
-  <title>Description</title>
-  <variablelist>
-   <varlistentry>
-    <term>-g, --group</term>
-    <listitem>
-     <para>XML Group ID or Name</para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term>-a, --add</term>
-    <listitem>
-     <para>add a XML group</para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term>-d, --delete</term>
-    <listitem>
-     <para>delete a XML group</para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term>-u, --update</term>
-    <listitem>
-     <para>update a XML group</para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term>-h, --help</term>
-    <listitem>
-     <para>prints the help</para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term>-f, --file</term>
-    <listitem>
-     <para>input XML-File with the XML-Deglarations</para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term>-c, --catalog</term>
-    <listitem>
-     <para>set the output catalog file else /etc/xml/catalog is used</para>
-    </listitem>
-   </varlistentry>
-  </variablelist>
- </refsect1>
+  <refsect1 id="xgm.example">
+   <title>Examples</title>
+   <example>
+    <title>Add a group</title>
+    <para>xml-group-manager -g group_name -a -f input_file -c catalog</para>
+   </example>
+   <example>
+    <title>Delete a group</title>
+    <para>xml-group-manager -g group_name -d -c catalog</para>
+   </example>
+   <example>
+    <title>Update a group</title>
+    <para>xml-group-manager -g group_name -a -f input_file -c catalog</para>
+   </example>
+  </refsect1>
 
- <refsect1 id="xgm.example">
-  <title>Examples</title>
-  <example>
-   <title>Add a group</title>
-   <para>xml-group-manager -g group_name -a -f input_file -c catalog</para>
-  </example>
-  <example>
-   <title>Delete a group</title>
-   <para>xml-group-manager -g group_name -d -c catalog</para>
-  </example>
-  <example>
-   <title>Update a group</title>
-   <para>xml-group-manager -g group_name -a -f input_file -c catalog</para>
-  </example>
- </refsect1>
+  <refsect1 id="xgm.moreinfo">
+   <title>See Also</title>
+   <variablelist>
+    <varlistentry>
+     <term>
+      <ulink url="https://github.com/werni/xml-group-manager"/>
+     </term>
+     <listitem>
+      <para>xml-group-manager GitHub Repository</para>
+     </listitem>
+    </varlistentry>
+   </variablelist>
+  </refsect1>
 
- <refsect1 id="xgm.moreinfo">
-  <title>See Also</title>
-  <variablelist>
-   <varlistentry>
-    <term>
-     <ulink url="https://github.com/werni/xml-group-manager"/>
-    </term>
-    <listitem>
-     <para>xml-group-manager GitHub Repository</para>
-    </listitem>
-   </varlistentry>
-  </variablelist>
- </refsect1>
-
-</refentry>
+ </refentry>
+</article>
