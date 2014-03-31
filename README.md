@@ -8,7 +8,6 @@ The xml-group-manager is a little helper script to add, delete or update groups 
 ```
 xml-group-manager <group> <add|delete|update> <suboptions>
 
-
 Global Options:
   -g, --group     XML Group ID or Name
 
