@@ -40,30 +40,30 @@ init()
 	if [[ -e $rootdir/xslt/add-group.xsl ]];then
 		add_stylesheet="$rootdir/xslt/add-group.xsl"
 	else
-		if [[ -e /usr/share/xml-group-manager/stylesheets/add-group.xsl ]];then
-			add_stylesheet="/usr/share/xml-group-manager/stylesheets/add-group.xsl"
+		if [[ -e /usr/share/xml-group-manager/xslt/add-group.xsl ]];then
+			add_stylesheet="/usr/share/xml-group-manager/xslt/add-group.xsl"
 		else
-			echo "Error: Can't found the xml-group-manager stylesheets!"
+			echo "Error: Cannot find the xml-group-manager xslt!"
 			exit 1
 		fi
 	fi
 	if [[ -e $rootdir/xslt/delete-group.xsl ]];then
 		delete_stylesheet="$rootdir/xslt/delete-group.xsl"
 	else
-		if [[ -e /usr/share/xml-group-manager/stylesheets/delete-group.xsl ]];then
-			delete_stylesheet="/usr/share/xml-group-manager/stylesheets/delete-group.xsl"
+		if [[ -e /usr/share/xml-group-manager/xslt/delete-group.xsl ]];then
+			delete_stylesheet="/usr/share/xml-group-manager/xslt/delete-group.xsl"
 		else
-			echo "Error: Can't found the xml-group-manager stylesheets!"
+			echo "Error: Cannot find the xml-group-manager xslt!"
 			exit 1
 		fi
 	fi
 	if [[ -e $rootdir/xslt/update-group.xsl ]];then
 		update_stylesheet="$rootdir/xslt/update-group.xsl"
 	else
-		if [[ -e /usr/share/xml-group-manager/stylesheets/update-group.xsl ]];then
-			update_stylesheet="/usr/share/xml-group-manager/stylesheets/update-group.xsl"
+		if [[ -e /usr/share/xml-group-manager/xslt/update-group.xsl ]];then
+			update_stylesheet="/usr/share/xml-group-manager/xslt/update-group.xsl"
 		else
-			echo "Error: Can't found the xml-group-manager stylesheets!"
+			echo "Error: Cannot find the xml-group-manager xslt!"
 			exit 1
 		fi
 	fi
