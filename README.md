@@ -1,32 +1,34 @@
 # About
-The xml-group-manager is a little helper script to add, delete or update groups in XML catalogs or XML files in an easy way. That means you can edit catalog files without any XML commands and without knowledge of the XML syntax.
+The xml-group-manager is a little helper script to add, delete, update or init groups in XML catalogs or XML files in an easy way. That means you can edit catalog files without any XML commands and without knowledge of the XML syntax.
 
 # Usage
 
 ## The Syntax
 
 ```
-xml-group-manager <group> <add|delete|update> <suboptions>
+xml-group-manager [option] [file]
 
-Global Options:
-  -g, --group     XML Group ID or Name
 
-  -a, --add       add an XML group
-  -d, --delete    delete an XML group
-  -u, --update    update an XML group
+Options:
 
-  -h, --help      print this help
+  -a GROUP, --add GROUP       add the XML group with the content
+                              from the given file
+  -d GROUP, --delete GROUP    delete the XML group
+  -u GROUP, --update GROUP    update the XML group with the content
+                              from the given file
+  -i GROUP, --init GROUP      creates the XML group and
+                              set delegatePublic and
+                              delegateSystem to the given file
 
-Suboptions:
-  -f, --file      input XML-File with the
-                  XML-Declarations
-  -c, --catalog   set the output catalog file; if
-                  not specified /etc/xml/catalog
-                  is used
+  -c FILE, --catalog FILE     set the output catalog file if
+                              not specified /etc/xml/catalog
+                              is used
+
+  -h, --help                  print this help
 ```
 
-## The Input File
-The input file contains only the part that copied directly into the group.
+## The Input File for Add and Update
+The input file contains only the needed part and is copied directly into the group.
 
 For Example:
 ```xml

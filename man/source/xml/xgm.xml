@@ -33,8 +33,8 @@
   <refnamediv>
    <refname>&xgm_command;</refname>
    <refpurpose>
-    The xml-group-manager is a little helper script to add, delete or update
-    groups in XML catalogs or XML files in an easy way. That means you can
+    The xml-group-manager is a little helper script to add, delete, update and
+    init groups in XML catalogs or XML files in an easy way. That means you can
     edit catalog files without any XML commands and without knowledge of the
     XML syntax.
    </refpurpose>
@@ -45,16 +45,10 @@
    <cmdsynopsis>
     <command>&xgm_command;</command>
     <arg choice="req">
-     <replaceable>GROUP</replaceable>
-    </arg>
-    <arg choice="req">
-     <replaceable>ADD|DELETE|UPDATE</replaceable>
-    </arg>
-    <arg choice="req">
-     <replaceable>INPUT_FILE</replaceable>
+     <replaceable>OPTION</replaceable>
     </arg>
     <arg choice="opt">
-     <replaceable>XML_CATALOG</replaceable>
+     <replaceable>FILE</replaceable>
     </arg>
    </cmdsynopsis>
   </refsynopsisdiv>
@@ -63,46 +57,49 @@
    <title>Description</title>
    <variablelist>
     <varlistentry>
-     <term>-g, --group</term>
+     <term>-a GROUP, --add GROUP</term>
      <listitem>
-      <para>XML Group ID or Name</para>
+      <para>
+       add the XML group with the content from the given file
+      </para>
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term>-a, --add</term>
+     <term>-d GROUP, --delete GROUP</term>
      <listitem>
-      <para>add an XML group</para>
+      <para>delete the XML group</para>
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term>-d, --delete</term>
+     <term>-u GROUP, --update GROUP</term>
      <listitem>
-      <para>delete an XML group</para>
+      <para>
+       update the XML group with the content from the given file
+      </para>
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term>-u, --update</term>
+     <term>-i GROUP, --init GROUP</term>
      <listitem>
-      <para>update an XML group</para>
+      <para>
+       creates the XML group and set delegatePublic and delegateSystem to the
+       given file
+      </para>
+     </listitem>
+    </varlistentry>
+    <varlistentry>
+     <term>-c FILE, --catalog FILE</term>
+     <listitem>
+      <para>
+       set the output catalog file; if not specified /etc/xml/catalog is
+       used
+      </para>
      </listitem>
     </varlistentry>
     <varlistentry>
      <term>-h, --help</term>
      <listitem>
       <para>print the help</para>
-     </listitem>
-    </varlistentry>
-    <varlistentry>
-     <term>-f, --file</term>
-     <listitem>
-      <para>input XML-File with the XML-Declarations</para>
-     </listitem>
-    </varlistentry>
-    <varlistentry>
-     <term>-c, --catalog</term>
-     <listitem>
-      <para>set the output catalog file; if not specified /etc/xml/catalog is
-      used</para>
      </listitem>
     </varlistentry>
    </variablelist>
@@ -112,15 +109,19 @@
    <title>Examples</title>
    <example>
     <title>Add a group</title>
-    <para>xml-group-manager -g group_name -a -f input_file -c catalog</para>
+    <para>xml-group-manager -a group_name -c catalog input_file</para>
    </example>
    <example>
     <title>Delete a group</title>
-    <para>xml-group-manager -g group_name -d -c catalog</para>
+    <para>xml-group-manager -d group_name -c catalog</para>
    </example>
    <example>
     <title>Update a group</title>
-    <para>xml-group-manager -g group_name -a -f input_file -c catalog</para>
+    <para>xml-group-manager -u group_name -c catalog input_file</para>
+   </example>
+   <example>
+    <title>Init a group</title>
+    <para>xml-group-manager -i group_name -c catalog target_file</para>
    </example>
   </refsect1>
 

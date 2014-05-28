@@ -10,27 +10,28 @@ script_usage()
 {
 echo "
 xml-group-manager (xgm)
-------------------------------------------------------
+-------------------------------------------------------------------
 
 Usage:
-xml-group-manager <group> <add|delete|update> <suboptions>
+xml-group-manager [option] [file]
 
 
-Global Options:
-  -g, --group     XML Group ID or Name
+Options:
 
-  -a, --add       add an XML group
-  -d, --delete    delete an XML group
-  -u, --update    update an XML group
+  -a GROUP, --add GROUP       add the XML group with the content
+                              from the given file
+  -d GROUP, --delete GROUP    delete the XML group
+  -u GROUP, --update GROUP    update the XML group with the content
+                              from the given file
+  -i GROUP, --init GROUP      creates the XML group and
+                              set delegatePublic and
+                              delegateSystem to the given file
 
-  -h, --help      print this help
+  -c FILE, --catalog FILE     set the output catalog file if
+                              not specified /etc/xml/catalog
+                              is used
 
-Suboptions:
-  -f, --file      input XML-File with the
-                  XML-Declarations
-  -c, --catalog   set the output catalog file; if
-                  not specified /etc/xml/catalog
-                  is used
+  -h, --help                  print this help
 "
 }
 
@@ -43,7 +44,7 @@ init()
 		if [[ -e /usr/share/xml-group-manager/xslt/add-group.xsl ]];then
 			add_stylesheet="/usr/share/xml-group-manager/xslt/add-group.xsl"
 		else
-			echo "Error: Cannot find the xml-group-manager xslt!"
+			echo "Error: Cannot find the xml-group-manager stylesheets!"
 			exit 1
 		fi
 	fi
@@ -53,7 +54,7 @@ init()
 		if [[ -e /usr/share/xml-group-manager/xslt/delete-group.xsl ]];then
 			delete_stylesheet="/usr/share/xml-group-manager/xslt/delete-group.xsl"
 		else
-			echo "Error: Cannot find the xml-group-manager xslt!"
+			echo "Error: Cannot find the xml-group-manager stylesheets!"
 			exit 1
 		fi
 	fi
@@ -63,7 +64,25 @@ init()
 		if [[ -e /usr/share/xml-group-manager/xslt/update-group.xsl ]];then
 			update_stylesheet="/usr/share/xml-group-manager/xslt/update-group.xsl"
 		else
-			echo "Error: Cannot find the xml-group-manager xslt!"
+			echo "Error: Cannot find the xml-group-manager stylesheets!"
+			exit 1
+		fi
+	fi
+	if [[ -e $rootdir/xslt/init-group.xsl ]];then
+		init_stylesheet="$rootdir/xslt/init-group.xsl"
+	else
+		if [[ -e /usr/share/xml-group-manager/xslt/init-group.xsl ]];then
+			update_stylesheet="/usr/share/xml-group-manager/xslt/init-group.xsl"
+		else
+			echo "Error: Cannot find the xml-group-manager stylesheets!"
+			exit 1
+		fi
+	fi
+	if [[ -z $catalog ]];then
+		if [[ -e /etc/xml/catalog ]];then
+			catalog=/etc/xml/catalog
+		else
+			echo "Error: Cannot find the xml catalog!"
 			exit 1
 		fi
 	fi
@@ -88,7 +107,7 @@ add_group()
 	if [[ -n $group && -e $file ]];then
 		prepair_files
 		xsltproc --stringparam xmlfile $tmp_input_file --stringparam group-id "$group" $add_stylesheet $catalog > $tmp_catalog
-		if [[ $? != 0 ]]; then
+		if [[ $? -ne 0 ]]; then
 			rm -- $tmp_catalog $tmp_input_file
 			exit 1
 		else
@@ -107,7 +126,7 @@ delete_group()
 	if [[ -n $group ]];then
 		prepair_file
 		xsltproc --stringparam group-id "$group" $delete_stylesheet $catalog > $tmp_catalog
-		if [[ $? != 0 ]]; then
+		if [[ $? -ne 0 ]]; then
 			rm -- $tmp_catalog
 			exit 1
 		else
@@ -126,7 +145,7 @@ update_group()
 	if [[ -n $group && -e $file ]];then
 		prepair_files
 		xsltproc --stringparam xmlfile $tmp_input_file --stringparam group-id "$group" $update_stylesheet $catalog > $tmp_catalog
-		if [[ $? != 0 ]]; then
+		if [[ $? -ne 0 ]]; then
 			rm -- $tmp_catalog $tmp_input_file
 			exit 1
 		else
@@ -140,58 +159,74 @@ update_group()
 	fi
 }
 
+init_group()
+{
+	if [[ -n $group && -e $file ]];then
+		prepair_file
+		xsltproc --stringparam targetfile "$file" --stringparam group-id "$group" $init_stylesheet $catalog > $tmp_catalog
+		if [[ $? -ne 0 ]]; then
+			rm -- $tmp_catalog $tmp_input_file
+			exit 1
+		else
+			xmllint --format $tmp_catalog -o $catalog
+			rm -- $tmp_catalog $tmp_input_file
+			exit 0
+		fi
+	else
+		echo "Error: Group or file is missing!"
+		exit 1
+	fi
+}
 
-ARGS=$(getopt -o g:aduhf:c: -l "group:,add,delete,update,help,file:,catalog:" -n "$0" -- "$@");
-
+ARGS=$(getopt -o a:d:u:i:c:h -l "add:,delete:,update:,init:,catalog:,help" -n "$0" -- "$@");
 while true; do
     case "$1" in
         -h|--help)
+            shift;
             script_usage
             exit 0
             ;;
         -a|--add)
-            if [ -n "$1" ]; then
+            shift;
+            if [[ -n "$1" ]]; then
+                group=$1;
                 action=add;
                 shift;
             fi
             ;;
         -d|--delete)
-            if [ -n "$1" ]; then
+            shift;
+            if [[ -n "$1" ]]; then
+                group=$1;
                 action=delete;
                 shift;
             fi
             ;;
         -u|--update)
-            if [ -n "$1" ]; then
+            shift;
+            if [[ -n "$1" ]]; then
+                group=$1;
                 action=update;
                 shift;
             fi
             ;;
-        -g|--group)
+        -i|--init)
             shift;
-            if [ -n "$1" ]; then
+            if [[ -n "$1" ]]; then
                 group=$1;
-                shift;
-            fi
-            ;;
-        -f|--file)
-            shift;
-            if [ -n "$1" ]; then
-                file=$(readlink -e $1);
+                action=init;
                 shift;
             fi
             ;;
         -c|--catalog)
             shift;
-            if [ -n "$1" ]; then
-                catalog=$(readlink -e $1);
+            if [[ -n "$1" ]]; then
+                catalog=$(readlink -e "$1");
                 shift;
-			else
-				catalog=/etc/xml/catlog
-				shift;
             fi
             ;;
 		--)
+			shift;
 			break;
 			;;
 		*)
@@ -200,6 +235,11 @@ while true; do
     esac
 done
 
+file=$(readlink -e "$@");
+if [[ 0 -ne $? ]]; then
+	echo "Error: Cannot find the given file!"
+	exit 1
+fi
 
 case "$action" in
 	add)
@@ -214,8 +254,13 @@ case "$action" in
 		init
 		update_group
 		;;
+	init)
+		init
+		init_group
+		;;
 	*)
 		echo "Error: No valid action given!"
+		script_usage
 		exit 1
 		;;
 esac
