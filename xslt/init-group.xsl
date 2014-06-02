@@ -8,6 +8,8 @@
     <xsl:key name="id" match="c:group" use="@id"/>
 
     <xsl:param name="group-id"/>
+    <xsl:param name="publicIdStartString"/>
+    <xsl:param name="systemIdStartString"/>
     <xsl:param name="targetfile"/>
 
     <xsl:template match="node() | @*">
@@ -25,8 +27,8 @@
                         <xsl:attribute name="id">
                             <xsl:value-of select="$group-id"/>
                         </xsl:attribute>
-                        <delegatePublic publicIdStartString="ISO 8879:1986//ENTITIES" catalog="file://{$targetfile}"/>
-                        <delegateSystem systemIdStartString="http://www.oasis-open.org/docbook/xmlcharent/0.3/" catalog="file://{$targetfile}"/>
+                        <delegatePublic publicIdStartString="{$publicIdStartString}" catalog="file://{$targetfile}"/>
+                        <delegateSystem systemIdStartString="{$systemIdStartString}" catalog="file://{$targetfile}"/>
                     </xsl:element>
                 </xsl:when>
                 <xsl:otherwise>

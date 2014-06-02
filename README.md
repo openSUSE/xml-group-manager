@@ -11,20 +11,25 @@ xml-group-manager [option] [file]
 
 Options:
 
-  -a GROUP, --add GROUP       add the XML group with the content
-                              from the given file
-  -d GROUP, --delete GROUP    delete the XML group
-  -u GROUP, --update GROUP    update the XML group with the content
-                              from the given file
-  -i GROUP, --init GROUP      creates the XML group and
-                              set delegatePublic and
-                              delegateSystem to the given file
+  -a GROUP, --add GROUP        add the XML group with the content
+                               from the given file
+  -d GROUP, --delete GROUP     delete the XML group
+  -u GROUP, --update GROUP     update the XML group with the content
+                               from the given file
+  -i GROUP, --init GROUP       creates the XML group and
+                               set delegatePublic and
+                               delegateSystem to the given file
 
-  -c FILE, --catalog FILE     set the output catalog file if
-                              not specified /etc/xml/catalog
-                              is used
+  -p STRING, --public STRING   defines the publicIdStartString for
+                               the init group command
+  -s STRING, --system STRING   defines the systemIdStartString for
+                               the init group command
 
-  -h, --help                  print this help
+  -c FILE, --catalog FILE      set the output catalog file if
+                               not specified /etc/xml/catalog
+                               is used
+
+  -h, --help                   print this help
 ```
 
 ## The Input File for Add and Update

@@ -18,20 +18,25 @@ xml-group-manager [option] [file]
 
 Options:
 
-  -a GROUP, --add GROUP       add the XML group with the content
-                              from the given file
-  -d GROUP, --delete GROUP    delete the XML group
-  -u GROUP, --update GROUP    update the XML group with the content
-                              from the given file
-  -i GROUP, --init GROUP      creates the XML group and
-                              set delegatePublic and
-                              delegateSystem to the given file
+  -a GROUP, --add GROUP        add the XML group with the content
+                               from the given file
+  -d GROUP, --delete GROUP     delete the XML group
+  -u GROUP, --update GROUP     update the XML group with the content
+                               from the given file
+  -i GROUP, --init GROUP       creates the XML group and
+                               set delegatePublic and
+                               delegateSystem to the given file
 
-  -c FILE, --catalog FILE     set the output catalog file if
-                              not specified /etc/xml/catalog
-                              is used
+  -p STRING, --public STRING   defines the publicIdStartString for
+                               the init group command
+  -s STRING, --system STRING   defines the systemIdStartString for
+                               the init group command
 
-  -h, --help                  print this help
+  -c FILE, --catalog FILE      set the output catalog file if
+                               not specified /etc/xml/catalog
+                               is used
+
+  -h, --help                   print this help
 "
 }
 
@@ -162,15 +167,24 @@ update_group()
 init_group()
 {
 	if [[ -n $group && -e $file ]];then
-		prepair_file
-		xsltproc --stringparam targetfile "$file" --stringparam group-id "$group" $init_stylesheet $catalog > $tmp_catalog
-		if [[ $? -ne 0 ]]; then
-			rm -- $tmp_catalog $tmp_input_file
-			exit 1
+		if [[ -n $public && -n $system ]];then
+			prepair_file
+			xsltproc --stringparam targetfile "$file" \
+			         --stringparam group-id "$group" \
+			         --stringparam publicIdStartString "$public" \
+					 --stringparam systemIdStartString "$system" \
+			         $init_stylesheet $catalog > $tmp_catalog
+			if [[ $? -ne 0 ]]; then
+				rm -- $tmp_catalog $tmp_input_file
+				exit 1
+			else
+				xmllint --format $tmp_catalog -o $catalog
+				rm -- $tmp_catalog $tmp_input_file
+				exit 0
+			fi
 		else
-			xmllint --format $tmp_catalog -o $catalog
-			rm -- $tmp_catalog $tmp_input_file
-			exit 0
+			echo "Error: publicIdStartString or systemIdStartString is missing!"
+			exit 1
 		fi
 	else
 		echo "Error: Group or file is missing!"
@@ -178,7 +192,7 @@ init_group()
 	fi
 }
 
-ARGS=$(getopt -o a:d:u:i:c:h -l "add:,delete:,update:,init:,catalog:,help" -n "$0" -- "$@");
+ARGS=$(getopt -o a:d:u:i:p:s:c:h -l "add:,delete:,update:,init:,public:,system:,catalog:,help" -n "$0" -- "$@");
 while true; do
     case "$1" in
         -h|--help)
@@ -218,6 +232,20 @@ while true; do
                 shift;
             fi
             ;;
+        -p|--public)
+            shift;
+            if [[ -n "$1" ]]; then
+                public=$1;
+                shift;
+            fi
+            ;;
+        -s|--system)
+            shift;
+            if [[ -n "$1" ]]; then
+                system=$1;
+                shift;
+            fi
+            ;;
         -c|--catalog)
             shift;
             if [[ -n "$1" ]]; then
@@ -234,12 +262,7 @@ while true; do
 			;;
     esac
 done
-
-file=$(readlink -e "$@");
-if [[ 0 -ne $? ]]; then
-	echo "Error: Cannot find the given file!"
-	exit 1
-fi
+file=$(readlink -e "$@" 2>/dev/null);
 
 case "$action" in
 	add)
