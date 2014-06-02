@@ -77,7 +77,7 @@ init()
 		init_stylesheet="$rootdir/xslt/init-group.xsl"
 	else
 		if [[ -e /usr/share/xml-group-manager/xslt/init-group.xsl ]];then
-			update_stylesheet="/usr/share/xml-group-manager/xslt/init-group.xsl"
+			init_stylesheet="/usr/share/xml-group-manager/xslt/init-group.xsl"
 		else
 			echo "Error: Cannot find the xml-group-manager stylesheets!"
 			exit 1
