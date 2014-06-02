@@ -42,3 +42,21 @@ For Example:
 <delegateURI uriStartString="http://www.oasis-open.org/docbook/xml/4.2" catalog="file:///usr/share/xml/docbook/schema/dtd/4.2/catalog.xml"/>
 <rewriteSystem systemIdStartString="http://www.oasis-open.org/docbook/xml/4.2" rewritePrefix="file:///usr/share/xml/docbook/schema/dtd/4.2"/>
 ```
+
+## Examples
+Add a group
+```
+xml-group-manager -a group_name -c catalog input_file</para>
+```
+Delete a group
+```
+xml-group-manager -d group_name -c catalog
+```
+Update a group
+```
+xml-group-manager -u group_name -c catalog input_file
+```
+Init a group
+```
+xml-group-manager -i group_name -p public_id_start_string -s system_id_start_string -c catalog target_file
+```
