@@ -20,9 +20,9 @@
 
     <xsl:template match="c:catalog">
         <xsl:copy>
-            <xsl:apply-templates/>
             <xsl:choose>
                 <xsl:when test="not(key('id', $group-id))">
+                    <xsl:apply-templates/>
                     <xsl:element name="group" namespace="urn:oasis:names:tc:entity:xmlns:xml:catalog">
                         <xsl:attribute name="id">
                             <xsl:value-of select="$group-id"/>
@@ -32,9 +32,26 @@
                     </xsl:element>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:message terminate="yes">Error: Group <xsl:value-of select="$group-id"/> alredy exists!</xsl:message>
+                    <xsl:apply-templates/>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:copy>
     </xsl:template>
+
+    <xsl:template match="c:group">
+        <xsl:choose>
+            <xsl:when test="@id = $group-id">
+                <xsl:copy>
+                    <xsl:attribute name="id">
+                        <xsl:value-of select="$group-id"/>
+                    </xsl:attribute>
+                    <delegatePublic publicIdStartString="{$publicIdStartString}" catalog="file://{$targetfile}"/>
+                    <delegateSystem systemIdStartString="{$systemIdStartString}" catalog="file://{$targetfile}"/>
+                </xsl:copy>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:copy-of select="."/>
+            </xsl:otherwise>
+        </xsl:choose>
+     </xsl:template>
 </xsl:stylesheet>

@@ -184,11 +184,10 @@ init_group()
 					 --stringparam systemIdStartString "$system" \
 			         $init_stylesheet $catalog > $tmp_catalog
 			if [[ $? -ne 0 ]]; then
-				rm -- $tmp_catalog $tmp_input_file
-				exit 1
+				rm -- $tmp_catalog
 			else
 				xmllint --format $tmp_catalog -o $catalog
-				rm -- $tmp_catalog $tmp_input_file
+				rm -- $tmp_catalog
 				exit 0
 			fi
 		else
