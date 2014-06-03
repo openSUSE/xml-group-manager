@@ -111,7 +111,10 @@ add_group()
 {
 	if [[ -n $group && -e $file ]];then
 		prepair_files
-		xsltproc --stringparam xmlfile $tmp_input_file --stringparam group-id "$group" $add_stylesheet $catalog > $tmp_catalog
+		xsltproc --nonet \
+		         --stringparam xmlfile $tmp_input_file \
+				 --stringparam group-id "$group"
+				 $add_stylesheet $catalog > $tmp_catalog
 		if [[ $? -ne 0 ]]; then
 			rm -- $tmp_catalog $tmp_input_file
 			exit 1
@@ -130,7 +133,9 @@ delete_group()
 {
 	if [[ -n $group ]];then
 		prepair_file
-		xsltproc --stringparam group-id "$group" $delete_stylesheet $catalog > $tmp_catalog
+		xsltproc --nonet \
+		         --stringparam group-id "$group" \
+				 $delete_stylesheet $catalog > $tmp_catalog
 		if [[ $? -ne 0 ]]; then
 			rm -- $tmp_catalog
 			exit 1
@@ -149,7 +154,10 @@ update_group()
 {
 	if [[ -n $group && -e $file ]];then
 		prepair_files
-		xsltproc --stringparam xmlfile $tmp_input_file --stringparam group-id "$group" $update_stylesheet $catalog > $tmp_catalog
+		xsltproc --nonet \
+		         --stringparam xmlfile $tmp_input_file \
+				 --stringparam group-id "$group" \
+				 $update_stylesheet $catalog > $tmp_catalog
 		if [[ $? -ne 0 ]]; then
 			rm -- $tmp_catalog $tmp_input_file
 			exit 1
@@ -169,7 +177,8 @@ init_group()
 	if [[ -n $group && -e $file ]];then
 		if [[ -n $public && -n $system ]];then
 			prepair_file
-			xsltproc --stringparam targetfile "$file" \
+			xsltproc --nonet \
+			         --stringparam targetfile "$file" \
 			         --stringparam group-id "$group" \
 			         --stringparam publicIdStartString "$public" \
 					 --stringparam systemIdStartString "$system" \
