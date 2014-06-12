@@ -98,8 +98,8 @@ prepair_files()
 	tmp_catalog=$(mktemp --tmpdir xmg-catalog-XXXXXXXX.xml)
 	tmp_input_file=$(mktemp --tmpdir xmg-input-XXXXXXXX.xml)
 	cp $file $tmp_input_file
-	sed -i '1 i\<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">' $tmp_input_file
-	sed -i '$a i\</catalog>' $tmp_input_file
+	sed -i '1 i\<group id="'$group'" xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">' $tmp_input_file
+	sed -i '$a </group>' $tmp_input_file
 }
 
 prepair_file()
@@ -113,7 +113,7 @@ add_group()
 		prepair_files
 		xsltproc --nonet \
 		         --stringparam xmlfile $tmp_input_file \
-				 --stringparam group-id "$group"
+				 --stringparam group-id "$group" \
 				 $add_stylesheet $catalog > $tmp_catalog
 		if [[ $? -ne 0 ]]; then
 			rm -- $tmp_catalog $tmp_input_file
