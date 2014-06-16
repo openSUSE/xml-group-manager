@@ -33,12 +33,12 @@
                     </xsl:element>
                 </xsl:when>
                 <xsl:otherwise>
-					<xsl:variable name="group-content">
+                    <xsl:variable name="group-content">
                         <xsl:for-each select="c:group[@id=$group-id]/*">
-						  <xsl:value-of select="name(.)"/>|<xsl:for-each select="@*"><xsl:value-of select="name(.)"/>=<xsl:value-of select="."/>|</xsl:for-each>
-					   </xsl:for-each>
+                          <xsl:value-of select="name(.)"/>|<xsl:for-each select="@*"><xsl:value-of select="name(.)"/>=<xsl:value-of select="."/>|</xsl:for-each>
+                       </xsl:for-each>
                     </xsl:variable>
-					<xsl:variable name="init-content">delegatePublic|publicIdStartString=<xsl:value-of select="$publicIdStartString"/>|catalog=file://<xsl:value-of select="$targetfile"/>|delegateSystem|systemIdStartString=<xsl:value-of select="$systemIdStartString"/>|catalog=file://<xsl:value-of select="$targetfile"/>|</xsl:variable>
+                    <xsl:variable name="init-content">delegatePublic|publicIdStartString=<xsl:value-of select="$publicIdStartString"/>|catalog=file://<xsl:value-of select="$targetfile"/>|delegateSystem|systemIdStartString=<xsl:value-of select="$systemIdStartString"/>|catalog=file://<xsl:value-of select="$targetfile"/>|</xsl:variable>
                     <xsl:choose>
                         <xsl:when test="$group-content = $init-content">
                             <xsl:message>Nothing to do <xsl:value-of select="$group-id"/> already exists with the same content.</xsl:message>

@@ -42,162 +42,162 @@ Options:
 
 init()
 {
-	rootdir=$(dirname "$(readlink -e "$0")")
-	if [[ -e $rootdir/xslt/add-group.xsl ]];then
-		add_stylesheet="$rootdir/xslt/add-group.xsl"
-	else
-		if [[ -e /usr/share/xml-group-manager/xslt/add-group.xsl ]];then
-			add_stylesheet="/usr/share/xml-group-manager/xslt/add-group.xsl"
-		else
-			echo "Error: Cannot find the xml-group-manager stylesheets!"
-			exit 1
-		fi
-	fi
-	if [[ -e $rootdir/xslt/delete-group.xsl ]];then
-		delete_stylesheet="$rootdir/xslt/delete-group.xsl"
-	else
-		if [[ -e /usr/share/xml-group-manager/xslt/delete-group.xsl ]];then
-			delete_stylesheet="/usr/share/xml-group-manager/xslt/delete-group.xsl"
-		else
-			echo "Error: Cannot find the xml-group-manager stylesheets!"
-			exit 1
-		fi
-	fi
-	if [[ -e $rootdir/xslt/update-group.xsl ]];then
-		update_stylesheet="$rootdir/xslt/update-group.xsl"
-	else
-		if [[ -e /usr/share/xml-group-manager/xslt/update-group.xsl ]];then
-			update_stylesheet="/usr/share/xml-group-manager/xslt/update-group.xsl"
-		else
-			echo "Error: Cannot find the xml-group-manager stylesheets!"
-			exit 1
-		fi
-	fi
-	if [[ -e $rootdir/xslt/init-group.xsl ]];then
-		init_stylesheet="$rootdir/xslt/init-group.xsl"
-	else
-		if [[ -e /usr/share/xml-group-manager/xslt/init-group.xsl ]];then
-			init_stylesheet="/usr/share/xml-group-manager/xslt/init-group.xsl"
-		else
-			echo "Error: Cannot find the xml-group-manager stylesheets!"
-			exit 1
-		fi
-	fi
-	if [[ -z $catalog ]];then
-		if [[ -e /etc/xml/catalog ]];then
-			catalog=/etc/xml/catalog
-		else
-			echo "Error: Cannot find the xml catalog!"
-			exit 1
-		fi
-	fi
+    rootdir=$(dirname "$(readlink -e "$0")")
+    if [[ -e $rootdir/xslt/add-group.xsl ]];then
+        add_stylesheet="$rootdir/xslt/add-group.xsl"
+    else
+        if [[ -e /usr/share/xml-group-manager/xslt/add-group.xsl ]];then
+            add_stylesheet="/usr/share/xml-group-manager/xslt/add-group.xsl"
+        else
+            echo "Error: Cannot find the xml-group-manager stylesheets!"
+            exit 1
+        fi
+    fi
+    if [[ -e $rootdir/xslt/delete-group.xsl ]];then
+        delete_stylesheet="$rootdir/xslt/delete-group.xsl"
+    else
+        if [[ -e /usr/share/xml-group-manager/xslt/delete-group.xsl ]];then
+            delete_stylesheet="/usr/share/xml-group-manager/xslt/delete-group.xsl"
+        else
+            echo "Error: Cannot find the xml-group-manager stylesheets!"
+            exit 1
+        fi
+    fi
+    if [[ -e $rootdir/xslt/update-group.xsl ]];then
+        update_stylesheet="$rootdir/xslt/update-group.xsl"
+    else
+        if [[ -e /usr/share/xml-group-manager/xslt/update-group.xsl ]];then
+            update_stylesheet="/usr/share/xml-group-manager/xslt/update-group.xsl"
+        else
+            echo "Error: Cannot find the xml-group-manager stylesheets!"
+            exit 1
+        fi
+    fi
+    if [[ -e $rootdir/xslt/init-group.xsl ]];then
+        init_stylesheet="$rootdir/xslt/init-group.xsl"
+    else
+        if [[ -e /usr/share/xml-group-manager/xslt/init-group.xsl ]];then
+            init_stylesheet="/usr/share/xml-group-manager/xslt/init-group.xsl"
+        else
+            echo "Error: Cannot find the xml-group-manager stylesheets!"
+            exit 1
+        fi
+    fi
+    if [[ -z $catalog ]];then
+        if [[ -e /etc/xml/catalog ]];then
+            catalog=/etc/xml/catalog
+        else
+            echo "Error: Cannot find the xml catalog!"
+            exit 1
+        fi
+    fi
 }
 
 prepair_files()
 {
-	tmp_catalog=$(mktemp --tmpdir xmg-catalog-XXXXXXXX.xml)
-	tmp_input_file=$(mktemp --tmpdir xmg-input-XXXXXXXX.xml)
-	cp $file $tmp_input_file
-	sed -i '1 i\<group id="'$group'" xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">' $tmp_input_file
-	sed -i '$a </group>' $tmp_input_file
+    tmp_catalog=$(mktemp --tmpdir xmg-catalog-XXXXXXXX.xml)
+    tmp_input_file=$(mktemp --tmpdir xmg-input-XXXXXXXX.xml)
+    cp $file $tmp_input_file
+    sed -i '1 i\<group id="'$group'" xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">' $tmp_input_file
+    sed -i '$a </group>' $tmp_input_file
 }
 
 prepair_file()
 {
-	tmp_catalog=$(mktemp --tmpdir xmg-catalog-XXXXXXXX.xml)
+    tmp_catalog=$(mktemp --tmpdir xmg-catalog-XXXXXXXX.xml)
 }
 
 add_group()
 {
-	if [[ -n $group && -e $file ]];then
-		prepair_files
-		xsltproc --nonet \
-		         --stringparam xmlfile $tmp_input_file \
-				 --stringparam group-id "$group" \
-				 $add_stylesheet $catalog > $tmp_catalog
-		if [[ $? -ne 0 ]]; then
-			rm -- $tmp_catalog $tmp_input_file
-			exit 1
-		else
-			xmllint --format $tmp_catalog -o $catalog
-			rm -- $tmp_catalog $tmp_input_file
-			exit 0
-		fi
-	else
-		echo "Error: Group or input file is missing!"
-		exit 1
-	fi
+    if [[ -n $group && -e $file ]];then
+        prepair_files
+        xsltproc --nonet \
+                 --stringparam xmlfile $tmp_input_file \
+                 --stringparam group-id "$group" \
+                 $add_stylesheet $catalog > $tmp_catalog
+        if [[ $? -ne 0 ]]; then
+            rm -- $tmp_catalog $tmp_input_file
+            exit 1
+        else
+            xmllint --format $tmp_catalog -o $catalog
+            rm -- $tmp_catalog $tmp_input_file
+            exit 0
+        fi
+    else
+        echo "Error: Group or input file is missing!"
+        exit 1
+    fi
 }
 
 delete_group()
 {
-	if [[ -n $group ]];then
-		prepair_file
-		xsltproc --nonet \
-		         --stringparam group-id "$group" \
-				 $delete_stylesheet $catalog > $tmp_catalog
-		if [[ $? -ne 0 ]]; then
-			rm -- $tmp_catalog
-			exit 1
-		else
-			xmllint --format $tmp_catalog -o $catalog
-			rm -- $tmp_catalog
-			exit 0
-		fi
-	else
-		echo "Error: Group is missing!"
-		exit 1
-	fi
+    if [[ -n $group ]];then
+        prepair_file
+        xsltproc --nonet \
+                 --stringparam group-id "$group" \
+                 $delete_stylesheet $catalog > $tmp_catalog
+        if [[ $? -ne 0 ]]; then
+            rm -- $tmp_catalog
+            exit 1
+        else
+            xmllint --format $tmp_catalog -o $catalog
+            rm -- $tmp_catalog
+            exit 0
+        fi
+    else
+        echo "Error: Group is missing!"
+        exit 1
+    fi
 }
 
 update_group()
 {
-	if [[ -n $group && -e $file ]];then
-		prepair_files
-		xsltproc --nonet \
-		         --stringparam xmlfile $tmp_input_file \
-				 --stringparam group-id "$group" \
-				 $update_stylesheet $catalog > $tmp_catalog
-		if [[ $? -ne 0 ]]; then
-			rm -- $tmp_catalog $tmp_input_file
-			exit 1
-		else
-			xmllint --format $tmp_catalog -o $catalog
-			rm -- $tmp_catalog $tmp_input_file
-			exit 0
-		fi
-	else
-		echo "Error: Group or input file is missing!"
-		exit 1
-	fi
+    if [[ -n $group && -e $file ]];then
+        prepair_files
+        xsltproc --nonet \
+                 --stringparam xmlfile $tmp_input_file \
+                 --stringparam group-id "$group" \
+                 $update_stylesheet $catalog > $tmp_catalog
+        if [[ $? -ne 0 ]]; then
+            rm -- $tmp_catalog $tmp_input_file
+            exit 1
+        else
+            xmllint --format $tmp_catalog -o $catalog
+            rm -- $tmp_catalog $tmp_input_file
+            exit 0
+        fi
+    else
+        echo "Error: Group or input file is missing!"
+        exit 1
+    fi
 }
 
 init_group()
 {
-	if [[ -n $group && -e $file ]];then
-		if [[ -n $public && -n $system ]];then
-			prepair_file
-			xsltproc --nonet \
-			         --stringparam targetfile "$file" \
-			         --stringparam group-id "$group" \
-			         --stringparam publicIdStartString "$public" \
-					 --stringparam systemIdStartString "$system" \
-			         $init_stylesheet $catalog > $tmp_catalog
-			if [[ $? -ne 0 ]]; then
-				rm -- $tmp_catalog
-			else
-				xmllint --format $tmp_catalog -o $catalog
-				rm -- $tmp_catalog
-				exit 0
-			fi
-		else
-			echo "Error: publicIdStartString or systemIdStartString is missing!"
-			exit 1
-		fi
-	else
-		echo "Error: Group or file is missing!"
-		exit 1
-	fi
+    if [[ -n $group && -e $file ]];then
+        if [[ -n $public && -n $system ]];then
+            prepair_file
+            xsltproc --nonet \
+                     --stringparam targetfile "$file" \
+                     --stringparam group-id "$group" \
+                     --stringparam publicIdStartString "$public" \
+                     --stringparam systemIdStartString "$system" \
+                     $init_stylesheet $catalog > $tmp_catalog
+            if [[ $? -ne 0 ]]; then
+                rm -- $tmp_catalog
+            else
+                xmllint --format $tmp_catalog -o $catalog
+                rm -- $tmp_catalog
+                exit 0
+            fi
+        else
+            echo "Error: publicIdStartString or systemIdStartString is missing!"
+            exit 1
+        fi
+    else
+        echo "Error: Group or file is missing!"
+        exit 1
+    fi
 }
 
 ARGS=$(getopt -o a:d:u:i:p:s:c:h -l "add:,delete:,update:,init:,public:,system:,catalog:,help" -n "$0" -- "$@");
@@ -261,37 +261,37 @@ while true; do
                 shift;
             fi
             ;;
-		--)
-			shift;
-			break;
-			;;
-		*)
-			break;
-			;;
+        --)
+            shift;
+            break;
+            ;;
+        *)
+            break;
+            ;;
     esac
 done
 file=$(readlink -e "$@" 2>/dev/null);
 
 case "$action" in
-	add)
-		init
-		add_group
-		;;
-	delete)
-		init
-		delete_group
-		;;
-	update)
-		init
-		update_group
-		;;
-	init)
-		init
-		init_group
-		;;
-	*)
-		echo "Error: No valid action given!"
-		script_usage
-		exit 1
-		;;
+    add)
+        init
+        add_group
+        ;;
+    delete)
+        init
+        delete_group
+        ;;
+    update)
+        init
+        update_group
+        ;;
+    init)
+        init
+        init_group
+        ;;
+    *)
+        echo "Error: No valid action given!"
+        script_usage
+        exit 1
+        ;;
 esac

@@ -25,16 +25,16 @@
                     <xsl:apply-templates select="$xmlfrag/*"/>
                 </xsl:when>
                 <xsl:otherwise>
-					<xsl:variable name="group">
+                    <xsl:variable name="group">
                         <xsl:for-each select="c:group[@id=$group-id]/*">
-						  <xsl:value-of select="name(.)"/>|<xsl:for-each select="@*"><xsl:value-of select="name(.)"/>=<xsl:value-of select="."/>|</xsl:for-each>
-					   </xsl:for-each>
+                          <xsl:value-of select="name(.)"/>|<xsl:for-each select="@*"><xsl:value-of select="name(.)"/>=<xsl:value-of select="."/>|</xsl:for-each>
+                       </xsl:for-each>
                     </xsl:variable>
-					<xsl:variable name="file">
+                    <xsl:variable name="file">
                         <xsl:for-each select="$xmlfrag/*/*">
-							<xsl:value-of select="name(.)"/>|<xsl:for-each select="@*"><xsl:value-of select="name(.)"/>=<xsl:value-of select="."/>|</xsl:for-each>
-						</xsl:for-each>
-					</xsl:variable>
+                            <xsl:value-of select="name(.)"/>|<xsl:for-each select="@*"><xsl:value-of select="name(.)"/>=<xsl:value-of select="."/>|</xsl:for-each>
+                        </xsl:for-each>
+                    </xsl:variable>
                     <xsl:choose>
                         <xsl:when test="$group = $file">
                             <xsl:message>Nothing to do <xsl:value-of select="$group-id"/> already exists with the same content.</xsl:message>
