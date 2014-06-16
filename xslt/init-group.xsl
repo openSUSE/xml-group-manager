@@ -23,7 +23,6 @@
             <xsl:apply-templates/>
             <xsl:choose>
                 <xsl:when test="not(key('id', $group-id))">
-                    <xsl:apply-templates/>
                     <xsl:element name="group" namespace="urn:oasis:names:tc:entity:xmlns:xml:catalog">
                         <xsl:attribute name="id">
                             <xsl:value-of select="$group-id"/>
