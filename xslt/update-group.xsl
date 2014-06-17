@@ -23,7 +23,7 @@
                 <xsl:apply-templates/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:message terminate="yes">Error: Group <xsl:value-of select="$group-id"/> dosn't exists!</xsl:message>
+                <xsl:message terminate="yes">Error: Group <xsl:value-of select="$group-id"/> doesn't exists!</xsl:message>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
