@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE article PUBLIC 
+<!DOCTYPE refentry PUBLIC 
 "-//OASIS//DTD DocBook XML V4.5//EN"
 "http://www.docbook.org/xml/4.5/docbookx.dtd"
 [
 <!ENTITY xgm_command "xml-group-manager">
 <!ENTITY xgm_version "1.0">
 ]>
-<article id="xgm.manpages" lang="en">
- <title>xml-group-manager man pages</title>
- <para>
-  The xml-group-manager man pages
- </para>
- <refentry lang="en" id="xgm">
+<refentry lang="en" id="xgm">
   <refentryinfo>
    <productname>&xgm_command;</productname>
    <authorgroup>
@@ -31,13 +26,8 @@
    <refmiscinfo class="manual">xml-group-manager</refmiscinfo>
   </refmeta>
   <refnamediv>
-   <refname>&xgm_command;</refname>
-   <refpurpose>
-    The xml-group-manager is a little helper script to add, delete, update and
-    init groups in XML catalogs or XML files in an easy way. That means you can
-    edit catalog files without any XML commands and without knowledge of the
-    XML syntax.
-   </refpurpose>
+    <refname>&xgm_command;</refname>
+    <refpurpose>Adds, deletes, updates, and init groups in XML Catalogs</refpurpose>
   </refnamediv>
 
   <refsynopsisdiv id="xgm.synopsis">
@@ -55,23 +45,27 @@
 
   <refsect1 id="xgm.description">
    <title>Description</title>
+    <para>The <command>xml-group-manager</command> command is a little helper
+      script to add, delete, update, and init groups in XML catalogs or XML
+      files in an easy way. You can edit catalog files without any XML
+      commands and without knowledge of the XML syntax.</para>
    <variablelist>
     <varlistentry>
-     <term>-a GROUP, --add GROUP</term>
+     <term><option>-a</option> GROUP, <option>--add</option> GROUP</term>
      <listitem>
       <para>
-       add the XML group with the content from the given file
+       adds the XML group with the content from the given file
       </para>
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term>-d GROUP, --delete GROUP</term>
+     <term><option>-d</option> GROUP, <option>--delete</option> GROUP</term>
      <listitem>
-      <para>delete the XML group</para>
+      <para>deletes the XML group</para>
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term>-u GROUP, --update GROUP</term>
+     <term><option>-u</option> GROUP, <option>--update</option> GROUP</term>
      <listitem>
       <para>
        update the XML group with the content from the given file
@@ -79,41 +73,41 @@
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term>-i GROUP, --init GROUP</term>
+     <term><option>-i</option> GROUP, <option>--init</option> GROUP</term>
      <listitem>
       <para>
-       creates the XML group and set delegatePublic and delegateSystem to the
-       given file
+       creates the XML group and set <sgmltag>delegatePublic</sgmltag> and 
+        <sgmltag>delegateSystem</sgmltag> to the given file
       </para>
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term>-p STRING, --public STRING</term>
+     <term><option>-p</option> STRING, <option>--public</option> STRING</term>
      <listitem>
       <para>
-       defines the publicIdStartString for the init group command
+       defines the <sgmltag>publicIdStartString</sgmltag> for the init group command
       </para>
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term>-s STRING, --system STRING</term>
+     <term><option>-s</option> STRING, <option>--system</option> STRING</term>
      <listitem>
       <para>
-       defines the systemIdStartString for the init group command
+       defines the <sgmltag>systemIdStartString</sgmltag> for the init group command
       </para>
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term>-c FILE, --catalog FILE</term>
+     <term><option>-c</option> FILE, <option>--catalog</option> FILE</term>
      <listitem>
       <para>
-       set the output catalog file; if not specified /etc/xml/catalog is
+       set the output catalog file; if not specified <filename>/etc/xml/catalog</filename> is
        used
       </para>
      </listitem>
     </varlistentry>
     <varlistentry>
-     <term>-h, --help</term>
+     <term><option>-h</option>, <option>--help</option></term>
      <listitem>
       <para>print the help</para>
      </listitem>
@@ -125,19 +119,19 @@
    <title>Examples</title>
    <example>
     <title>Add a group</title>
-    <para>xml-group-manager -a group_name -c catalog input_file</para>
+    <screen>xml-group-manager -a group_name -c catalog input_file</screen>
    </example>
    <example>
     <title>Delete a group</title>
-    <para>xml-group-manager -d group_name -c catalog</para>
+    <screen>xml-group-manager -d group_name -c catalog</screen>
    </example>
    <example>
     <title>Update a group</title>
-    <para>xml-group-manager -u group_name -c catalog input_file</para>
+    <screen>xml-group-manager -u group_name -c catalog input_file</screen>
    </example>
    <example>
     <title>Init a group</title>
-    <para>xml-group-manager -i group_name -p public_id_start_string -s system_id_start_string -c catalog target_file</para>
+    <screen>xml-group-manager -i group_name -p public_id_start_string -s system_id_start_string -c catalog target_file</screen>
    </example>
   </refsect1>
 
@@ -145,15 +139,17 @@
    <title>See Also</title>
    <variablelist>
     <varlistentry>
-     <term>
-      <ulink url="https://github.com/werni/xml-group-manager"/>
-     </term>
+     <term><ulink url="https://github.com/werni/xml-group-manager"/></term>
      <listitem>
       <para>xml-group-manager GitHub Repository</para>
      </listitem>
     </varlistentry>
+     <varlistentry>
+       <term><ulink url="https://www.oasis-open.org/committees/entity/spec-2001-08-06.html"/></term>
+       <listitem>
+         <para>XML catalog specification</para>
+       </listitem>
+     </varlistentry>
    </variablelist>
   </refsect1>
-
  </refentry>
-</article>
