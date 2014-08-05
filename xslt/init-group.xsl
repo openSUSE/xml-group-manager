@@ -20,7 +20,6 @@
 
     <xsl:template match="c:catalog">
         <xsl:copy>
-            <xsl:apply-templates/>
             <xsl:choose>
                 <xsl:when test="not(key('id', $group-id))">
                     <xsl:element name="group" namespace="urn:oasis:names:tc:entity:xmlns:xml:catalog">
@@ -48,6 +47,7 @@
                     </xsl:choose>
                 </xsl:otherwise>
             </xsl:choose>
+            <xsl:apply-templates/>
         </xsl:copy>
     </xsl:template>
 </xsl:stylesheet>

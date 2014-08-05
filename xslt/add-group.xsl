@@ -19,7 +19,6 @@
 
     <xsl:template match="c:catalog">
         <xsl:copy>
-            <xsl:apply-templates/>
             <xsl:choose>
                 <xsl:when test="not(key('id', $group-id))">
                     <xsl:apply-templates select="$xmlfrag/*"/>
@@ -45,6 +44,7 @@
                     </xsl:choose>
                 </xsl:otherwise>
             </xsl:choose>
+            <xsl:apply-templates/>
         </xsl:copy>
     </xsl:template>
 </xsl:stylesheet>
