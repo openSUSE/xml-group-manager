@@ -5,18 +5,14 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
     <xsl:output indent="yes"/>
+    <xsl:include href="core.xsl"/>
+    
     <xsl:key name="id" match="c:group" use="@id"/>
 
     <xsl:param name="group-id"/>
     <xsl:param name="publicIdStartString"/>
     <xsl:param name="systemIdStartString"/>
     <xsl:param name="targetfile"/>
-
-    <xsl:template match="node() | @*">
-        <xsl:copy>
-            <xsl:apply-templates select="@* | node()"/>
-        </xsl:copy>
-    </xsl:template>
 
     <xsl:template match="c:catalog">
         <xsl:copy>
